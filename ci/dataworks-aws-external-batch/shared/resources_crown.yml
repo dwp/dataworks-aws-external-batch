@@ -1,0 +1,34 @@
+resources:
+  - name: dataworks-aws-external-batch
+    type: git
+    source:
+      branch: master
+      username: ((github_com.username))
+      password: ((github_com.token))
+      uri: https://github.com/dwp/dataworks-aws-external-batch.git
+    check_every: 15m
+
+  - name: aws-analytical-dataset-generation
+    type: git
+    source:
+      branch: master
+      username: ((github_com.username))
+      password: ((github_com.token))
+      uri: https://github.com/dwp/aws-analytical-dataset-generation.git
+    check_every: 15m
+
+  - name: aws-common-infrastructure
+    type: git
+    source:
+      branch: master
+      private_key: ((svc-dip.private_key))
+      uri: git@github.ucds.io:dip/aws-common-infrastructure.git
+    check_every: 15m
+    webhook_token: ((ucfs-github.webhook-token))
+
+  - name: utc-7am-trigger
+    type: time
+    source:
+      location: UTC
+      start: 07:00
+      stop: 08:00

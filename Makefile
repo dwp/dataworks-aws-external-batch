@@ -11,39 +11,27 @@ help:
 
 .PHONY: bootstrap
 bootstrap: ## Bootstrap local environment for first use
-	@make git-hooks
-	pip3 install --user Jinja2 PyYAML boto3
+	make git-hooks terraform
+
+.PHONY: git-hooks
+git-hooks: ## Set up hooks in .git/hooks
+	@{ \
+		HOOK_DIR=.git/hooks; \
+		for hook in $(shell ls .githooks); do \
+			if [ ! -h $${HOOK_DIR}/$${hook} -a -x $${HOOK_DIR}/$${hook} ]; then \
+				mv $${HOOK_DIR}/$${hook} $${HOOK_DIR}/$${hook}.local; \
+				echo "moved existing $${hook} to $${hook}.local"; \
+			fi; \
+			ln -s -f ../../.githooks/$${hook} $${HOOK_DIR}/$${hook}; \
+		done \
+	}
+
+.PHONY: terraform
+terraform:
+		pip3 install --user Jinja2 PyYAML boto3
 	@{ \
 		export AWS_PROFILE=$(aws_profile); \
 		export AWS_REGION=$(aws_region); \
 		python3 bootstrap_terraform.py; \
 	}
 	terraform fmt -recursive
-
-.PHONY: git-hooks
-git-hooks: ## Set up hooks in .githooks
-	@git submodule update --init .githooks ; \
-	git config core.hooksPath .githooks \
-
-
-.PHONY: terraform-init
-terraform-init: ## Run `terraform init` from repo root
-	terraform init
-
-.PHONY: terraform-plan
-terraform-plan: ## Run `terraform plan` from repo root
-	terraform plan
-
-.PHONY: terraform-apply
-terraform-apply: ## Run `terraform apply` from repo root
-	terraform apply
-
-.PHONY: terraform-workspace-new
-terraform-workspace-new: ## Creates new Terraform workspace with Concourse remote execution. Run `terraform-workspace-new workspace=<workspace_name>`
-	declare -a workspace=( qa integration preprod production ) && \
-	make bootstrap ; \
-	cp terraform.tf workspaces.tf && \
-	for i in "$${workspace[@]}" ; do \
-		fly -t aws-concourse execute --config create-workspace.yml --input repo=. -v workspace="$$i" ; \
-	done
-	rm workspaces.tf

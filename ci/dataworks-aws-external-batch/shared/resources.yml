@@ -1,0 +1,233 @@
+resources:
+  - name: dataworks-aws-external-batch
+    type: git
+    source:
+      branch: master
+      access_token: ((dataworks-secrets.concourse_github_pat))
+      uri: https://github.com/dwp/dataworks-aws-external-batch.git
+    check_every: 5m
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: dataworks-aws-external-batch-update-pipeline
+    type: git
+    source:
+      branch: master
+      access_token: ((dataworks-secrets.concourse_github_pat))
+      uri: https://github.com/dwp/dataworks-aws-external-batch.git
+      paths:
+        - ci/*
+        - aviator.yml
+    check_every: 5m
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: dataworks-aws-external-batch-pr
+    type: pull-request
+    source:
+      access_token: ((dataworks-secrets.concourse_github_pat))
+      repository: dwp/dataworks-aws-external-batch
+    check_every: 720h
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: emp-release
+    type: github-release
+    source:
+      owner: dwp
+      repository: emr-encryption-materials-provider
+      access_token: ((dataworks-secrets.concourse_github_pat))
+    check_every: 5m
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: custom-auth-lambda-release
+    type: github-release
+    source:
+      owner: dwp
+      repository: dataworks-analytical-custom-auth-flow
+      access_token: ((dataworks-secrets.concourse_github_pat))
+    check_every: 1h
+
+  - name: onboarding-email-template
+    type: git
+    source:
+      branch: master
+      paths: [default_email_template_analytical_onboarding.html]
+      uri: https://((dataworks.enterprise_github_url))/dip/aws-management-infrastructure.git
+      username: ((dataworks.enterprise_github_username))
+      password: ((dataworks-secrets.enterprise_github_pat))
+    check_every: 1h
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: rnd-repo
+    type: git
+    source:
+      branch: master
+      username: ((dataworks.enterprise_github_username))
+      password: ((dataworks-secrets.enterprise_github_pat))
+      uri: https://((dataworks.enterprise_github_url))/dip/rnd.git
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: rnd-incoming-repo
+    type: git
+    source:
+      branch: master
+      username: ((dataworks.enterprise_github_username))
+      password: ((dataworks-secrets.enterprise_github_pat))
+      uri: https://((dataworks.enterprise_github_url))/dip/rnd_incoming.git
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: chs-how-many-repo
+    type: git
+    source:
+      branch: master
+      username: ((dataworks.enterprise_github_username))
+      password: ((dataworks-secrets.enterprise_github_pat))
+      uri: https://((dataworks.enterprise_github_url))/dip/chs-how-many.git
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: chs-auditlog-repo
+    type: git
+    source:
+      branch: master
+      username: ((dataworks.enterprise_github_username))
+      password: ((dataworks-secrets.enterprise_github_pat))
+      uri: https://((dataworks.enterprise_github_url))/dip/chs-auditlog.git
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: impact-measures-repo
+    type: git
+    source:
+      branch: master
+      username: ((dataworks.enterprise_github_username))
+      password: ((dataworks-secrets.enterprise_github_pat))
+      uri: https://((dataworks.enterprise_github_url))/dip/impact-measures.git
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: aws-uc-lab-repo
+    type: git
+    source:
+      branch: master
+      username: ((dataworks.enterprise_github_username))
+      password: ((dataworks-secrets.enterprise_github_pat))
+      uri: https://((dataworks.enterprise_github_url))/dip/aws-uc-lab.git
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+#  - name: datateam_dotfiles-repo
+#    type: git
+#    source:
+#      branch: master
+#      username: ((dataworks.enterprise_github_username))
+#      password: ((dataworks-secrets.enterprise_github_pat))
+#      uri: https://((dataworks.enterprise_github_url))/dip/datateam_dotfiles.git
+#    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+#  - name: datateam_dotfiles-incoming-repo
+#    type: git
+#    source:
+#      branch: master
+#      username: ((dataworks.enterprise_github_username))
+#      password: ((dataworks-secrets.enterprise_github_pat))
+#      uri: https://((dataworks.enterprise_github_url))/dip/datateam_dotfiles-incoming.git
+#    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: emr-launcher-release
+    type: github-release
+    source:
+      owner: dwp
+      repository: emr-launcher
+      access_token: ((dataworks-secrets.concourse_github_pat))
+    check_every: 1h
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: manage-mysql-user-release
+    type: github-release
+    source:
+      owner: dwp
+      repository: manage-mysql-user
+      access_token: ((dataworks-secrets.concourse_github_pat))
+    check_every: 1h
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: hive-custom-auth-release
+    type: github-release
+    source:
+      owner: dwp
+      repository: external-batch-hive-custom-auth
+      access_token: ((dataworks-secrets.concourse_github_pat))
+    check_every: 1h
+    webhook_token: ((dataworks.concourse_github_webhook_token))
+
+  - name: meta-development
+    type: meta
+
+  - name: meta-qa
+    type: meta
+
+  - name: meta-integration
+    type: meta
+
+  - name: meta-management-dev
+    type: meta
+
+  - name: meta-management
+    type: meta
+
+  - name: meta-preprod
+    type: meta
+
+  - name: meta-production
+    type: meta
+
+  - name: meta-testing-dev
+    type: meta
+
+  - name: meta-testing-qa
+    type: meta
+
+  - name: meta-testing-prod
+    type: meta
+
+  - name: meta-testing-preprod
+    type: meta
+
+  - name: meta-testing-integration
+    type: meta
+
+  - name: utc-2am-trigger
+    type: time
+    source:
+      location: UTC
+      start: 02:00
+      stop: 03:00
+
+  - name: working-day-copy-trigger
+    type: time
+    source:
+      location: UTC
+      start: 08:00
+      stop: 20:00
+      interval: 10m
+      days: [Monday, Tuesday, Wednesday, Thursday, Friday]
+
+  - name: emr-al2-ami
+    type: ami
+    check_every: 1h
+    source:
+      aws_role_arn: "arn:aws:iam::((aws_account.management)):role/ci"
+      region: ((dataworks.aws_region))
+      filters:
+        owner-id: "((aws_account.management))"
+        is-public: false
+        state: available
+        name: dw-al2-emr-ami-1613152072
+
+  - name: untested-al2-external-batch-emr-ami
+    type: ami
+    check_every: 5m
+    source:
+      aws_role_arn: arn:aws:iam::((aws_account.management)):role/ci
+      region: ((dataworks.aws_region))
+      filters:
+        owner-id: ((aws_account.management))
+        is-public: false
+        state: available
+        name: untested-dw-al2-external-batch-emr-ami-*
+        architecture: x86_64

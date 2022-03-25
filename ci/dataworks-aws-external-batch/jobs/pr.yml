@@ -1,0 +1,109 @@
+jobs:
+  - name: pull-request
+    max_in_flight: 1
+    plan:
+      - get: dataworks-aws-external-batch
+        resource: dataworks-aws-external-batch-pr
+        trigger: true
+        version: every
+      - get: emr-launcher-release
+      - get: manage-mysql-user-release
+      - get: hive-custom-auth-release
+      - get: emr-al2-ami
+      - put: dataworks-aws-external-batch
+        resource: dataworks-aws-external-batch-pr
+        params:
+          path: dataworks-aws-external-batch
+          status: pending
+      - .: (( inject meta.plan.terraform-bootstrap ))
+        params:
+          DEPLOY_PATH: infra
+      - .: (( inject meta.plan.terraform-plan ))
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/infra'
+        params:
+          TF_WORKSPACE: 'qa'
+          TF_CLI_ARGS_plan: -lock-timeout=300s # overwrite removes -detailed-exitcode
+      - .: (( inject meta.plan.terraform-bootstrap ))
+        params:
+          DEPLOY_PATH: app
+      - .: (( inject meta.plan.terraform-plan ))
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/app'
+          inputs:
+            - name: emr-launcher-release
+            - name: manage-mysql-user-release
+            - name: hive-custom-auth-release
+        params:
+          TF_WORKSPACE: 'qa'
+          TF_CLI_ARGS_plan: -lock-timeout=300s # overwrite removes -detailed-exitcode
+          TF_VAR_emp_dir_path: ../../../../emp-release
+      - .: (( inject meta.plan.terraform-bootstrap ))
+        params:
+          DEPLOY_PATH: testing
+      - .: (( inject meta.plan.terraform-plan ))
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/testing'
+        params:
+          TF_WORKSPACE: 'qa'
+          TF_CLI_ARGS_plan: -lock-timeout=300s # overwrite removes -detailed-exitcode
+          TF_VAR_emp_dir_path: ../../../../emp-release
+    on_failure:
+      put: dataworks-aws-external-batch
+      resource: dataworks-aws-external-batch-pr
+      params:
+        path: dataworks-aws-external-batch
+        status: failure
+    on_success:
+      put: dataworks-aws-external-batch
+      resource: dataworks-aws-external-batch-pr
+      params:
+        path: dataworks-aws-external-batch
+        status: success
+  - name: pull-request-cognito
+    max_in_flight: 1
+    plan:
+      - get: dataworks-aws-external-batch
+        resource: dataworks-aws-external-batch-pr
+        trigger: true
+        version: every
+      - put: dataworks-aws-external-batch
+        resource: dataworks-aws-external-batch-pr
+        params:
+          path: dataworks-aws-external-batch
+          status: pending
+      - get: custom-auth-lambda-release
+        trigger: false
+      - get: emr-al2-ami
+        trigger: false
+      - get: onboarding-email-template
+        trigger: false
+      - .: (( inject meta.plan.terraform-bootstrap ))
+        params:
+          DEPLOY_PATH: cognito
+      - .: (( inject meta.plan.terraform-plan ))
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/cognito'
+          inputs:
+            - name: custom-auth-lambda-release
+            - name: onboarding-email-template
+        params:
+          TF_CLI_ARGS_plan: -lock-timeout=300s # overwrite removes -detailed-exitcode
+          TF_VAR_custom_auth_file_path: ../../../../custom-auth-lambda-release/lambda.zip
+          TF_VAR_onboarding_email_file_path: ../../../../onboarding-email-template/default_email_template_analytical_onboarding.html
+    on_failure:
+      put: dataworks-aws-external-batch
+      resource: dataworks-aws-external-batch-pr
+      params:
+        path: dataworks-aws-external-batch
+        status: failure
+    on_success:
+      put: dataworks-aws-external-batch
+      resource: dataworks-aws-external-batch-pr
+      params:
+        path: dataworks-aws-external-batch
+        status: success

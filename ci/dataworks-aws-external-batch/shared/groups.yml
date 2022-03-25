@@ -1,0 +1,50 @@
+groups:
+  - name: master
+    jobs:
+      - development
+      - qa
+      - integration
+      - preprod
+      - after-midnight-check
+      - production
+
+  - name: pull-request
+    jobs:
+      - pull-request
+      - pull-request-cognito
+
+  - name: cognito
+    jobs:
+      - management-dev
+      - management
+
+  - name: codecommit
+    jobs:
+      - copy-repos
+      - copy-rnd-incoming
+
+  - name: testing
+    jobs:
+      - testing-development
+      - testing-qa
+      - testing-production
+      - testing-integration
+      - testing-preproduction
+      - metrics-submit-job-development
+      - metrics-submit-job-production
+      - metrics-submit-job-preproduction
+      - metrics-submit-job-integration
+      - metrics-submit-job-qa
+
+  - name: github-proxy
+    jobs:
+      - gh-proxy-mgmt-dev
+      - gh-proxy-mgmt
+
+  - name: ami-test
+    jobs:
+      - apply-and-test-with-ami
+
+  - name: update-pipeline
+    jobs:
+      - update-pipeline

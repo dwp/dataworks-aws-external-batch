@@ -1,0 +1,923 @@
+jobs:
+  - name: mirror-git-repo-uc-lab-repo-prod
+    plan:
+      - get: aws-uc-lab-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-uc-lab-repo
+          inputs:
+            - name: aws-uc-lab-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-uc-lab/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-opsmi-ops-mi-repo-prod
+    plan:
+      - get: opsmi-chs-ops-mi-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opsmi-chs-ops-mi-repo
+          inputs:
+            - name: opsmi-chs-ops-mi-repo
+          params:
+            S3_ROOT: component/uc_repos/opsmi-chs-ops-mi-repo/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-payment-timelines-prod
+    plan:
+      - get: aws-payment-timelines-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-payment-timelines-repo
+          inputs:
+            - name: aws-payment-timelines-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-payment-timelines/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-cbol-data-prod
+    plan:
+      - get: aws-cbol-data-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-cbol-data-repo
+          inputs:
+            - name: aws-cbol-data-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-cbol-data/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-user-data-migration-prod
+    plan:
+      - get: aws-user-data-migration-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-user-data-migration-repo
+          inputs:
+            - name: aws-user-data-migration-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-user-data-migration/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-claimant-history-prod
+    plan:
+      - get: aws-claimant-history-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-claimant-history-repo
+          inputs:
+            - name: aws-claimant-history-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-claimant-history/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-data-exploration-prod
+    plan:
+      - get: aws-data-exploration-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-data-exploration-repo
+          inputs:
+            - name: aws-data-exploration-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-data-exploration/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-azkaban-dev-prod
+    plan:
+      - get: azkaban-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: azkaban-dev-repo
+          inputs:
+            - name: azkaban-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/azkaban-dev/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-auditlog-prod
+    plan:
+      - get: aws-auditlog-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-auditlog-repo
+          inputs:
+            - name: aws-auditlog-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-auditlog/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-auditlog-dev-prod
+    plan:
+      - get: aws-auditlog-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-auditlog-dev-repo
+          inputs:
+            - name: aws-auditlog-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/aws-auditlog/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-claimant-history-dev-prod
+    plan:
+      - get: aws-claimant-history-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-claimant-history-dev-repo
+          inputs:
+            - name: aws-claimant-history-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/aws-claimant-history/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-uc-channel-prod
+    plan:
+      - get: aws-uc-channel-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-uc-channel-repo
+          inputs:
+            - name: aws-uc-channel-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-uc-channel/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-uc-channel-dev-prod
+    plan:
+      - get: aws-uc-channel-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-uc-channel-dev-repo
+          inputs:
+            - name: aws-uc-channel-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/aws-uc-channel/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-impact-measures-prod
+    plan:
+      - get: impact-measures-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: impact-measures-repo
+          inputs:
+            - name: impact-measures-repo
+          params:
+            S3_ROOT: component/uc_repos/impact-measures/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-impact-measures-dev-prod
+    plan:
+      - get: impact-measures-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: impact-measures-dev-repo
+          inputs:
+            - name: impact-measures-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/impact-measures/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-how-many-prod
+    plan:
+      - get: aws-how-many-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-how-many-repo
+          inputs:
+            - name: aws-how-many-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-how-many/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-how-many-dev-prod
+    plan:
+      - get: aws-how-many-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-how-many-dev-repo
+          inputs:
+            - name: aws-how-many-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/aws-how-many/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-dwx-housing-prod
+    plan:
+      - get: aws-dwx-housing-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-dwx-housing-repo
+          inputs:
+            - name: aws-dwx-housing-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-dwx-housing/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-nat-stats-production
+    plan:
+      - get: aws-nat-stats
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-nat-stats
+          inputs:
+            - name: aws-nat-stats
+          params:
+            S3_ROOT: component/uc_repos/aws-nat-stats
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+
+  - name: mirror-git-repo-aws-dwx-sas-extracts-production
+    plan:
+      - get: aws-dwx-sas-extracts-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-dwx-sas-extracts-repo
+          inputs:
+            - name: aws-dwx-sas-extracts-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-dwx-sas-extracts
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-pdm-to-rtg-exports-prod
+    plan:
+      - get: aws-pdm-to-rtg-exports
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-pdm-to-rtg-exports
+          inputs:
+            - name: aws-pdm-to-rtg-exports
+          params:
+            S3_ROOT: component/uc_repos/aws-pdm-to-rtg-exports
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-htme-to-rtg-exports-prod
+    plan:
+      - get: aws-htme-to-rtg-exports
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-htme-to-rtg-exports
+          inputs:
+            - name: aws-htme-to-rtg-exports
+          params:
+            S3_ROOT: component/uc_repos/aws-htme-to-rtg-exports
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-one-service-prod
+    plan:
+      - get: aws-one-service-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-one-service-repo
+          inputs:
+            - name: aws-one-service-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-one-service
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-opsmi-opti-azkaban-production
+    plan:
+      - get: opsmi-opti-azkaban-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opsmi-opti-azkaban-repo
+          inputs:
+            - name: opsmi-opti-azkaban-repo
+          params:
+            S3_ROOT: component/uc_repos/opti-azkaban
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-opsmi-opti-azkaban-dev-production
+    plan:
+      - get: opsmi-opti-azkaban-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opsmi-opti-azkaban-dev-repo
+          inputs:
+            - name: opsmi-opti-azkaban-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/opti-azkaban
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-ucfs-universe-repo-production
+    plan:
+      - get: time-6am-trigger
+        trigger: true
+      - get: ucfs-universe-repo
+        trigger: false
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: ucfs-universe-repo
+          inputs:
+            - name: ucfs-universe-repo
+          params:
+            S3_ROOT: component/uc_repos/ucfs-universe/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-ers-ucds-reporting-production
+    plan:
+      - get: ers-ucds-reporting
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: ers-ucds-reporting
+          inputs:
+            - name: ers-ucds-reporting
+          params:
+            S3_ROOT: component/uc_repos/ers-ucds-reporting/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-ers-ucds-reporting-dev-production
+    plan:
+      - get: ers-ucds-reporting-dev
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: ers-ucds-reporting-dev
+          inputs:
+            - name: ers-ucds-reporting-dev
+          params:
+            S3_ROOT: component/uc_repos/dev/ers-ucds-reporting/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-transform-json-repo-prod
+    plan:
+      - get: aws-transform-json-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-transform-json-repo
+          inputs:
+            - name: aws-transform-json-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-transform-json/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-vulnerable-journal-messages-prod
+    plan:
+      - get: vulnerable-journal-messages-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: vulnerable-journal-messages-repo
+          inputs:
+            - name: vulnerable-journal-messages-repo
+          params:
+            S3_ROOT: component/uc_repos/vulnerable_journal_messages/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-vulnerable-journal-messages-dev-prod
+    plan:
+      - get: vulnerable-journal-messages-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: vulnerable-journal-messages-dev-repo
+          inputs:
+            - name: vulnerable-journal-messages-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/vulnerable_journal_messages/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-aws-dataworks-extracts-repo-prod
+    plan:
+      - get: aws-dataworks-extracts-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-dataworks-extracts-repo
+          inputs:
+            - name: aws-dataworks-extracts-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-dataworks-extracts/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-kds-rnd-repo-production
+    plan:
+      - get: kds-rnd-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: kds-rnd-repo
+          inputs:
+            - name: kds-rnd-repo
+          params:
+            S3_ROOT: component/uc_repos/kds-rnd/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-json-to-csv-repo-prod
+    plan:
+      - get: aws-json-to-csv-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-json-to-csv-repo
+          inputs:
+            - name: aws-json-to-csv-repo
+          params:
+            S3_ROOT: component/uc_repos/aws-json-to-csv/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-common-repo-prod
+    plan:
+      - get: opti-az-common-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-common-repo
+          inputs:
+            - name: opti-az-common-repo
+          params:
+            S3_ROOT: component/uc_repos/opti-az-common/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-common-dev-repo-prod
+    plan:
+      - get: opti-az-common-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-common-dev-repo
+          inputs:
+            - name: opti-az-common-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/opti-az-common/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-daily-opsmi-repo-prod
+    plan:
+      - get: opti-az-daily-opsmi-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-daily-opsmi-repo
+          inputs:
+            - name: opti-az-daily-opsmi-repo
+          params:
+            S3_ROOT: component/uc_repos/opti-az-daily-opsmi/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-daily-opsmi-dev-repo-prod
+    plan:
+      - get: opti-az-daily-opsmi-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-daily-opsmi-dev-repo
+          inputs:
+            - name: opti-az-daily-opsmi-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/opti-az-daily-opsmi/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-labour-market-repo-prod
+    plan:
+      - get: opti-az-labour-market-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-labour-market-repo
+          inputs:
+            - name: opti-az-labour-market-repo
+          params:
+            S3_ROOT: component/uc_repos/opti-az-labour-market/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-labour-market-dev-repo-prod
+    plan:
+      - get: opti-az-labour-market-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-labour-market-dev-repo
+          inputs:
+            - name: opti-az-labour-market-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/opti-az-labour-market/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-case-cleanse-repo-prod
+    plan:
+      - get: opti-az-case-cleanse-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-case-cleanse-repo
+          inputs:
+            - name: opti-az-case-cleanse-repo
+          params:
+            S3_ROOT: component/uc_repos/opti-az-case-cleanse/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-case-cleanse-dev-repo-prod
+    plan:
+      - get: opti-az-case-cleanse-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-case-cleanse-dev-repo
+          inputs:
+            - name: opti-az-case-cleanse-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/opti-az-case-cleanse/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-wca-repo-prod
+    plan:
+      - get: opti-az-wca-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-wca-repo
+          inputs:
+            - name: opti-az-wca-repo
+          params:
+            S3_ROOT: component/uc_repos/opti-az-wca/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-opti-az-wca-dev-repo-prod
+    plan:
+      - get: opti-az-wca-dev-repo
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: opti-az-wca-dev-repo
+          inputs:
+            - name: opti-az-wca-dev-repo
+          params:
+            S3_ROOT: component/uc_repos/dev/opti-az-wca/
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+
+  - name: mirror-git-repo-aws-welfare-grant-production
+    plan:
+      - get: aws-welfare-grant
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: aws-welfare-grant
+          inputs:
+            - name: aws-welfare-grant
+          params:
+            S3_ROOT: component/uc_repos/aws-welfare-grant
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
+ 
+  - name: mirror-git-repo-ni-payment-scan-production
+    plan:
+      - get: ni-payment-scan
+        trigger: true
+      - get: aws-common-infrastructure
+        trigger: false
+      - .: (( inject meta.plan.terraform-output-common ))
+        config:
+          params:
+            TF_WORKSPACE: production
+      - .: (( inject meta.plan.mirror-git-repo ))
+        config:
+          run:
+            dir: ni-payment-scan
+          inputs:
+            - name: ni-payment-scan
+          params:
+            S3_ROOT: component/uc_repos/ni-payment-scan
+            AWS_ROLE_ARN: arn:aws:iam::((aws_account.production)):role/ci
