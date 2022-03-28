@@ -1,0 +1,29 @@
+jobs:
+  - name: testing-integration
+    max_in_flight: 1
+    plan:
+      - put: meta
+        resource: meta-testing-integration
+      - get: dataworks-aws-external-batch
+        trigger: false
+      - get: emr-al2-ami
+        trigger: false
+      - .: (( inject meta.plan.terraform-bootstrap ))
+        params:
+          DEPLOY_PATH: testing
+      - .: (( inject meta.plan.terraform-apply ))
+        task: terraform-apply-testing
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/testing'
+        params:
+          TF_WORKSPACE: 'integration'
+          TF_VAR_test_proxy_user: 'xxxxx'
+      - .: (( inject meta.plan.terraform-plan ))
+        task: terraform-plan-testing
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/testing'
+        params:
+          TF_WORKSPACE: 'integration'
+          TF_VAR_test_proxy_user: 'xxxxx'

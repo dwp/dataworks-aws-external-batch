@@ -1,0 +1,47 @@
+jobs:
+  - name: management
+    max_in_flight: 1
+    plan:
+      - put: meta
+        resource: meta-management
+      - get: dataworks-aws-external-batch
+        trigger: true
+        passed:
+          - management-dev
+      - get: custom-auth-lambda-release
+        trigger: true
+        passed:
+          - management-dev
+      - get: onboarding-email-template
+        trigger: true
+        passed:
+          - management-dev
+      - get: emr-al2-ami
+        trigger: true
+        passed:
+          - management-dev
+      - .: (( inject meta.plan.terraform-bootstrap ))
+        params:
+          DEPLOY_PATH: cognito
+      - .: (( inject meta.plan.terraform-apply ))
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/cognito'
+          inputs:
+            - name: custom-auth-lambda-release
+            - name: onboarding-email-template
+        params:
+          TF_WORKSPACE: 'management'
+          TF_VAR_custom_auth_file_path: ../../../../custom-auth-lambda-release/lambda.zip
+          TF_VAR_onboarding_email_file_path: ../../../../onboarding-email-template/default_email_template_analytical_onboarding.html
+      - .: (( inject meta.plan.terraform-plan ))
+        config:
+          run:
+            dir: 'dataworks-aws-external-batch/terraform/deploy/cognito'
+          inputs:
+            - name: custom-auth-lambda-release
+            - name: onboarding-email-template
+        params:
+          TF_WORKSPACE: 'management'
+          TF_VAR_custom_auth_file_path: ../../../../custom-auth-lambda-release/lambda.zip
+          TF_VAR_onboarding_email_file_path: ../../../../onboarding-email-template/default_email_template_analytical_onboarding.html
